@@ -20,6 +20,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    if: ${{ github.ref != 'refs/heads/main' }}
     steps:
     - uses: actions/checkout@v4.1.5
 
@@ -75,8 +76,7 @@ jobs:
         with:
           use: true
 #          Building only for amd64 for now
-          platforms: linux/amd64
-#          platforms: linux/arm64,linux/amd64
+          platforms: linux/arm64,linux/amd64
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6.8.0
@@ -86,5 +86,4 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64
-#          platforms: linux/arm64,linux/amd64
+          platforms: linux/arm64,linux/amd64
