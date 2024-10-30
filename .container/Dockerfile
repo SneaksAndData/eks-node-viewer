@@ -4,10 +4,11 @@ WORKDIR /app
 
 COPY . .
 
-RUN go mod tidy
-RUN go build -o eks-node-viewer ./cmd/eks-node-viewer
+RUN go mod tidy && \
+    go build -o eks-node-viewer ./cmd/eks-node-viewer && \
+    rm -rf /go/pkg /go/src
 
-FROM debian:buster-slim
+FROM debian:bookworm-slim
 
 WORKDIR /app
 
