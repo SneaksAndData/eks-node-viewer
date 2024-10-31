@@ -240,7 +240,7 @@ func (u *UIModel) writeClusterSummary(resources []v1.ResourceName, stats Stats, 
 }
 
 func sendSpendToDogStatsD(spend float64) {
-	client, err := statsd.New("unix:///var/run/datadog/dsd.socket")
+	client, err := statsd.New("datadog-statsd.datadog.svc.cluster.local:8125")
 	if err != nil {
 		log.Fatalf("Error creating DogStatsD client: %v", err)
 	}
