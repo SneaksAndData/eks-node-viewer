@@ -20,6 +20,7 @@ import (
 	"github.com/DataDog/datadog-go/v5/statsd"
 	"io"
 	"log"
+	"os"
 	"sort"
 	"strings"
 	"time"
@@ -240,7 +241,13 @@ func (u *UIModel) writeClusterSummary(resources []v1.ResourceName, stats Stats, 
 }
 
 func sendSpendToDogStatsD(spend float64) {
-	client, err := statsd.New("datadog-statsd.datadog.svc.cluster.local:8125")
+
+	statsdAddress := os.Getenv("STATSD_ADDRESS")
+	if statsdAddress == "" {
+		log.Fatal("STATSD_ADDRESS environment variable not set")
+	}
+
+	client, err := statsd.New(statsdAddress)
 	if err != nil {
 		log.Fatalf("Error creating DogStatsD client: %v", err)
 	}
