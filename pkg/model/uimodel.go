@@ -247,7 +247,7 @@ func sendSpendToDogStatsD(spend float64) {
 		log.Fatal("STATSD_ADDRESS environment variable not set")
 	}
 
-	client, err := statsd.New(statsdAddress)
+	client, err := statsd.New(statsdAddress, statsd.WithNamespace("eks-node-viewer"))
 	if err != nil {
 		log.Fatalf("Error creating DogStatsD client: %v", err)
 	}
@@ -257,7 +257,6 @@ func sendSpendToDogStatsD(spend float64) {
 			log.Fatalf("Error closing DogStatsD client: %v", err)
 		}
 	}(client)
-	statsd.WithNamespace("eks-node-viewer")
 	// Send the cluster monthly spend as a custom metric
 	err = client.Gauge("monthly.spend", spend, nil, 1)
 	if err != nil {
